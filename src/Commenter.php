@@ -15,4 +15,12 @@ trait Commenter
     {
         return $this->hasMany(Comment::class, 'commenter_id');
     }
+	
+	/**
+     * check if user banned
+     */
+    public function isBanned()
+    {
+        return false;
+    }
 }

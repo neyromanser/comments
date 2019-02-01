@@ -21,6 +21,10 @@ class CreateCommentsTable extends Migration
             $table->unsignedBigInteger('child_id')->nullable();
             $table->foreign('child_id')->references('id')->on('comments')->onDelete('cascade');
             $table->timestamps();
+
+            $table->bigInteger('rate')->default(0);
+            $table->bigInteger('rate_up')->default(0);
+            $table->bigInteger('rate_down')->default(0);
         });
     }
 

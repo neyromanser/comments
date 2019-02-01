@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Laravelista\Comments\Events\CommentCreated;
 use Laravelista\Comments\Events\CommentUpdated;
 use Laravelista\Comments\Events\CommentDeleted;
+use App\Helpers\Sorter;
 
 class Comment extends Model
 {
@@ -48,7 +49,11 @@ class Comment extends Model
      */
     public function children()
     {
-        return $this->hasMany(Comment::class, 'child_id');
+        $sort = Sorter::getCommentSortId();
+        $orderField = $sort == 1 ? 'rate' : 'id';
+        $orderDir = $sort == 1 ? 'desc' : 'asc';
+
+        return $this->hasMany(Comment::class, 'child_id')->orderBy($orderField, $orderDir);
     }
 
     /**
@@ -57,5 +62,15 @@ class Comment extends Model
     public function parent()
     {
         return $this->belongsTo(Comment::class, 'child_id');
+    }
+
+    /**
+     * check if user voted for this comment
+     * @param $userId
+     */
+    public function voted($userId){
+        return CommentVote::where('user_id', $userId)
+            ->where('comment_id', $this->id)
+            ->exists();
     }
 }

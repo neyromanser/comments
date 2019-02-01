@@ -88,4 +88,36 @@ class CommentsController extends Controller
 
         return redirect()->to(url()->previous() . '#comment-' . $reply->id);
     }
+
+    public function vote(Request $request){
+        $this->validate($request, [
+            'id' => 'required|integer|exists:comments,id',
+            'type' => 'required|in:up,down',
+        ]);
+
+        $comment = Comment::where('id', $request->get('id'))
+            ->first();
+
+        $this->authorize('vote', $comment);
+
+        if($request->get('type') == 'up'){
+            $rate = 1;
+            $comment->rate_up++;
+        }else{
+            $rate = -1;
+            $comment->rate_down++;
+        }
+        $comment->rate++;
+        $comment->save();
+
+        $vote = new CommentVote();
+        $vote->user_id = auth()->user()->id;
+        $vote->comment_id = $comment->id;
+        $vote->rate = $rate;
+        $vote->save();
+
+        $comment->save();
+
+        return ['status' => 'success'];
+    }
 }

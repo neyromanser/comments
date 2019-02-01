@@ -5,14 +5,16 @@
             <input type="hidden" name="commentable_type" value="\{{ get_class($model) }}" />
             <input type="hidden" name="commentable_id" value="{{ $model->id }}" />
             <div class="form-group">
-                <label for="message">Enter your message here:</label>
-                <textarea class="form-control @if($errors->has('message')) is-invalid @endif" name="message" rows="3"></textarea>
-                <div class="invalid-feedback">
-                    Your message is required.
+                <div class="comment_input_line">
+                    <div class="comment_logo" style="background-image: url('https://www.gravatar.com/avatar/64e1b8d34f425d19e1ee2ea7236d3028.jpg')"></div>
+                    <textarea class="form-control @if($errors->has('message')) is-invalid @endif" name="message" rows="2" placeholder="{{ trans('comments.Join the disqussion') }}"></textarea>
+                    
                 </div>
-                <small class="form-text text-muted"><a target="_blank" href="https://help.github.com/articles/basic-writing-and-formatting-syntax">Markdown</a> cheatsheet.</small>
+                <div class="invalid-feedback">
+                   {{ trans('comments.Your message is required.') }}
+                </div>
             </div>
-            <button type="submit" class="btn btn-sm btn-outline-success text-uppercase">Submit</button>
+            <button type="submit" class="btn btn-sm btn-outline-success text-uppercase">{{ trans('comments.Submit') }}</button>
         </form>
     </div>
 </div>

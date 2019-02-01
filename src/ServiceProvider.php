@@ -41,8 +41,12 @@ class ServiceProvider extends LaravelServiceProvider
         // The user can only reply to other peoples comments and
         // not to his own comments.
         Gate::define('reply-to-comment', function ($user, $comment) {
-            return true;
+            return !$user->isBanned();
 			//return $user->id != $comment->commenter_id;
+        });
+
+        Gate::define('vote', function ($user, $comment) {
+            return $user->id != $comment->commenter_id && !$comment->voted($user->id);
         });
     }
 
